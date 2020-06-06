@@ -7,9 +7,14 @@ class App extends Component {
 
     this.state = {
       selectedImg: null,
+      text: null,
+      confirmation: null,
     };
     this.fileSelect = this.fileSelect.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
+    this.handleText = this.handleText.bind(this);
+    this.handleImage = this.handleImage.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   fileSelect(e) {
@@ -18,30 +23,44 @@ class App extends Component {
     });
   }
 
+  handleChange(e) {
+    this.setState({
+      text: e.target.value,
+    });
+  }
+
+  handleImage() {
+    const { selectedImg } = this.state;
+    const fd = new FormData();
+    fd.append('newImage', selectedImg, selectedImg.name);
+    return axios.post('/uploadImg', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) });
+  }
+
+  handleText() {
+    const { text } = this.state;
+    return axios.post('/uploadText', { text });
+  }
+
   handleUpload(e) {
     e.preventDefault();
-    const { selectedImg } = this.state;
-    if (selectedImg !== null) {
-      const fd = new FormData();
-      fd.append('newImage', selectedImg, selectedImg.name);
-      axios.post('/uploadImg', fd, {
-        onUploadProgress: (progressEvent) => console.log(`Upload Process:  ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`),
-      })
-        .then((response) => console.log(`Successfully Uploaded on ${response.headers.date}`))
+    const { selectedImg, text, confirmation } = this.state;
+    if (selectedImg !== null && text !== null) {
+      axios.all([this.handleImage(), this.handleText()])
+        .then(axios.spread((...response) => {
+          const imgRes = response[0].data;
+          const textRes = response[1].data.toString();
+          this.setState({
+            confirmation: [imgRes, textRes],
+          });
+        }))
         .catch((err) => console.log(`Something went wrong! ${err}`));
     }
   }
 
   render() {
-    const { server } = this.state;
+    const { confirmation } = this.state;
     return (
       <div className="main-container">
-        <div>
-          Hello from React!
-        </div>
-        <div>
-          {server}
-        </div>
         <form onSubmit={this.handleUpload}>
           <input
             type="file"
@@ -49,9 +68,21 @@ class App extends Component {
             onChange={this.fileSelect}
             ref={(fileInput) => this.fileInput = fileInput}
           />
-          <button type="button" onClick={() => this.fileInput.click()}>Upload Image</button>
-          <button type="submit">Upload</button>
+          <button type="button" onClick={() => this.fileInput.click()}>Select</button>
+          <input
+            type="text"
+            onChange={this.handleChange}
+          />
+          <button type="submit">Encode</button>
         </form>
+        <div>
+          {confirmation !== null
+          && (
+          <div>
+            {`Encoded "****${confirmation[1].substring(confirmation[1].length - 4)}" into ${confirmation[0]}!`}
+          </div>
+          )}
+        </div>
       </div>
     );
   }

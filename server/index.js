@@ -19,13 +19,19 @@ const upload = multer({ storage });
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 
-app.get('/lol', (req, res) => {
-  res.end('my dude');
+let text;
+
+app.post('/uploadText', (req, res) => {
+  text = req.body.text;
+  res.send(text);
+  res.end();
 });
 
 app.post('/uploadImg', upload.single('newImage'), (req, res) => {
   console.log(req.file);
-  res.end('is ok');
+  const name = req.file.originalname;
+  res.send(name);
+  res.end();
 });
 
 app.listen(port, () => console.log(`Listening on ${port}`));

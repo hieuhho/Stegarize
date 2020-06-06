@@ -6,31 +6,13 @@ class App extends Component {
     super(props);
 
     this.state = {
-      server: 'default',
-      selectedImg: 'ok',
+      selectedImg: null,
     };
-    this.test = this.test.bind(this);
     this.fileSelect = this.fileSelect.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
   }
 
-  componentDidMount() {
-    this.test();
-  }
-
-  test() {
-    axios.get('/lol')
-      .then((data) => {
-        this.setState({
-          server: data.data,
-          selectedImg: '',
-        });
-      })
-      .catch((err) => console.log('is err: ', err));
-  }
-
   fileSelect(e) {
-    console.log('e.target.files[0]: ', e.target.files[0]);
     this.setState({
       selectedImg: e.target.files[0],
     });
@@ -39,14 +21,15 @@ class App extends Component {
   handleUpload(e) {
     e.preventDefault();
     const { selectedImg } = this.state;
-    const fd = new FormData();
-    fd.append('newImage', selectedImg, selectedImg.name);
-    console.log('fd: ', fd);
-    axios.post('/uploadImg', fd, {
-      onUploadProgress: (progressEvent) => console.log(`Upload Process:  ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`),
-    })
-      .then((res) => console.log('is axios', res))
-      .catch((err) => console.log('is err', err));
+    if (selectedImg !== null) {
+      const fd = new FormData();
+      fd.append('newImage', selectedImg, selectedImg.name);
+      axios.post('/uploadImg', fd, {
+        onUploadProgress: (progressEvent) => console.log(`Upload Process:  ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`),
+      })
+        .then((response) => console.log(`Successfully Uploaded on ${response.headers.date}`))
+        .catch((err) => console.log(`Something went wrong! ${err}`));
+    }
   }
 
   render() {

@@ -3,8 +3,18 @@ const path = require('path');
 const multer = require('multer');
 
 const app = express();
-const upload = multer({ dest: 'uploads/' });
-const port = 4000;
+const port = process.env.PORT || 4000;
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, './uploads');
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());

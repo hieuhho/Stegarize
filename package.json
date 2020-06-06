@@ -1,18 +1,32 @@
 {
   "name": "steganography",
   "version": "1.0.0",
-  "description": "",
+  "description": "This app allows user to upload an image, encode the image with text and reveal the hidden text on subsequent re-upload",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -p",
+    "build-dev": "webpack -d --watch",
+    "start": "nodemon server/index.js --i client/ --i public"
   },
   "keywords": [],
   "author": "Hieu Ho",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "axios": "^0.19.2",
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "webpack": "^4.43.0",
+    "webpack-cli": "^3.3.11"
   },
   "devDependencies": {
+    "@babel/cli": "^7.10.1",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.10.2",
+    "@babel/preset-react": "^7.10.1",
+    "babel-loader": "^8.1.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.1.0",
     "eslint-plugin-import": "^2.20.2",

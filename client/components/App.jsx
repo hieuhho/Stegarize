@@ -6,7 +6,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      isTrue: true,
+      server: 'default',
     };
     this.test = this.test.bind(this);
   }
@@ -17,15 +17,23 @@ class App extends Component {
 
   test() {
     axios.get('/lol')
-      .then((data) => console.log(data.data))
+      .then((data) => {
+        this.setState((prevState) => ({
+          server: [data.data],
+        }));
+      })
       .catch((err) => console.log('is err: ', err));
   }
 
   render() {
+    const { server } = this.state;
     return (
       <div className="main-container">
         <div>
           Hello from React!
+        </div>
+        <div>
+          {server}
         </div>
       </div>
     );

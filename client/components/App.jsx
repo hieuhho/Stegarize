@@ -8,12 +8,25 @@ class App extends Component {
     this.state = {
       isTrue: true,
     };
+    this.test = this.test.bind(this);
+  }
+
+  componentDidMount() {
+    this.test();
+  }
+
+  test() {
+    axios.get('/lol')
+      .then((data) => console.log(data.data))
+      .catch((err) => console.log('is err: ', err));
   }
 
   render() {
     return (
-      <div>
-        Hello from React!
+      <div className="main-container">
+        <div>
+          Hello from React!
+        </div>
       </div>
     );
   }

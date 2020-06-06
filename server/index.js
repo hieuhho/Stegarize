@@ -8,8 +8,7 @@ const port = 4000;
 app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 
-app.get('/', (req, res) => {
-  console.log('req: ', req.body);
+app.get('/lol', (req, res) => {
   res.end('my dude');
 });
 

@@ -1,16 +1,18 @@
 {
   "name": "steganography",
   "version": "1.0.0",
-  "description": "",
+  "description": "This app allows user to upload an image, encode the image with text and reveal the hidden text on subsequent re-upload",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server/index.js"
   },
   "keywords": [],
   "author": "Hieu Ho",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "nodemon": "^2.0.4"
   },
   "devDependencies": {
     "eslint": "^6.8.0",

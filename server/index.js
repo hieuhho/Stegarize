@@ -22,6 +22,7 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 
 let text;
+let fileName;
 
 app.post('/uploadText', (req, res) => {
   text = req.body.text;
@@ -30,13 +31,16 @@ app.post('/uploadText', (req, res) => {
 
 app.post('/uploadImg', upload.single('newImage'), (req, res) => {
   console.log(req.file);
-  const name = req.file.originalname;
+  fileName = req.file.originalname;
   const original = fs.readFileSync(req.file.path);
   const message = text;
   const concealed = steggy.conceal(original, message, 'utf-8');
-  fs.writeFileSync(`./encoded/${req.file.originalname}`, concealed);
-  res.write(name);
-  res.end();
+  fs.writeFileSync(`./encoded/${fileName}`, concealed);
+  res.download(`./encoded/${fileName}`, fileName);
+});
+
+app.get('/download', (req, res) => {
+  res.download(`./encoded/${fileName}`, fileName);
 });
 
 

@@ -8,7 +8,7 @@ class App extends Component {
     this.state = {
       text: '',
       confirmation: null,
-      selectedImg: null,
+      selectedImg: '',
     };
     this.fileSelect = this.fileSelect.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -58,8 +58,10 @@ class App extends Component {
               selectedImg: null,
               confirmation: null,
             });
-          }, 3000);
+          }, 10000);
+          setTimeout(() => window.location.reload(false), 15000);
         })
+        .then(() => window.open('/download'))
         .catch((err) => console.log(`Something went wrong! ${err}`));
     }
   }

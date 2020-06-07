@@ -11,16 +11,21 @@ class App extends Component {
       selectedImg: null,
       imgPreview: null,
     };
-    this.handleUpload = this.handleUpload.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleImage = this.handleImage.bind(this);
+    this.handleEncode = this.handleEncode.bind(this);
     this.handleDecode = this.handleDecode.bind(this);
-    this.handleChange = this.handleChange.bind(this);
   }
 
   handleChange(e) {
     e.target.id === 'selectedImg' ? this.setState({ selectedImg: e.target.files[0], imgPreview: URL.createObjectURL(e.target.files[0]) })
       : this.setState({ [e.target.id]: e.target.value });
+  }
+
+  handleText() {
+    const { text } = this.state;
+    return axios.post('/uploadText', { text });
   }
 
   handleImage() {
@@ -30,21 +35,7 @@ class App extends Component {
     return axios.post('/uploadImg', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) });
   }
 
-  handleDecode() {
-    const { selectedImg } = this.state;
-    const fd = new FormData();
-    fd.append('decodeImage', selectedImg, selectedImg.name);
-    axios.post('/decode', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) })
-      .then((res) => { this.setState({ decoded: res.data }); })
-      .catch((err) => console.log(err));
-  }
-
-  handleText() {
-    const { text } = this.state;
-    return axios.post('/uploadText', { text });
-  }
-
-  handleUpload(e) {
+  handleEncode(e) {
     e.preventDefault();
     const { selectedImg, text } = this.state;
     if (selectedImg !== null && text !== '') {
@@ -53,8 +44,6 @@ class App extends Component {
           this.setState({
             confirmation: 'keep it secret, keep it safe',
           });
-        }))
-        .then(() => {
           setTimeout(() => {
             this.setState({
               text: '',
@@ -64,10 +53,19 @@ class App extends Component {
             });
           }, 4000);
           setTimeout(() => window.location.reload(false), 5000);
-        })
+        }))
         .then(() => window.open('/download'))
         .catch((err) => console.log(`Something went wrong! ${err}`));
     }
+  }
+
+  handleDecode() {
+    const { selectedImg } = this.state;
+    const fd = new FormData();
+    fd.append('decodeImage', selectedImg, selectedImg.name);
+    axios.post('/decode', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) })
+      .then((res) => { this.setState({ decoded: res.data, imgPreview: null }); })
+      .catch((err) => console.log(`Something went wrong! ${err}`));
   }
 
   render() {
@@ -76,15 +74,17 @@ class App extends Component {
     } = this.state;
     return (
       <div className="main-container">
+        <h1>
+          Stegarize
+        </h1>
         <div className="confirmation">
           {confirmation !== null && (
-          <div>
-            {confirmation}
-          </div>
-          )}
+          <div>{confirmation}</div>)}
         </div>
+        <br />
         <form
-          onSubmit={this.handleUpload}
+          className="userArea"
+          onSubmit={this.handleEncode}
           encType="multipart/form-data"
           autoComplete="off"
         >
@@ -95,8 +95,9 @@ class App extends Component {
             onChange={this.handleChange}
             ref={(fileInput) => this.fileInput = fileInput}
           />
-          <button type="button" onClick={() => this.fileInput.click()}>Upload</button>
+          <button className="uploadButton" type="button" onClick={() => this.fileInput.click()}>Upload</button>
           <input
+            className="textBox"
             type="text"
             placeholder="Hide your message"
             id="text"

@@ -6,9 +6,9 @@ class App extends Component {
     super(props);
 
     this.state = {
-      selectedImg: null,
-      text: null,
+      text: '',
       confirmation: null,
+      selectedImg: '',
     };
     this.fileSelect = this.fileSelect.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
@@ -43,22 +43,31 @@ class App extends Component {
 
   handleUpload(e) {
     e.preventDefault();
-    const { selectedImg, text, confirmation } = this.state;
-    if (selectedImg !== null && text !== null) {
+    const { selectedImg, text } = this.state;
+    if (selectedImg !== null && text !== '') {
       axios.all([this.handleImage(), this.handleText()])
         .then(axios.spread((...response) => {
-          const imgRes = response[0].data;
-          const textRes = response[1].data.toString();
           this.setState({
-            confirmation: [imgRes, textRes],
+            confirmation: 'keep it secret, keep it safe',
           });
         }))
+        .then(() => {
+          setTimeout(() => {
+            this.setState({
+              text: '',
+              selectedImg: null,
+              confirmation: null,
+            });
+          }, 10000);
+          setTimeout(() => window.location.reload(false), 15000);
+        })
+        .then(() => window.open('/download'))
         .catch((err) => console.log(`Something went wrong! ${err}`));
     }
   }
 
   render() {
-    const { confirmation } = this.state;
+    const { text, confirmation } = this.state;
     return (
       <div className="main-container">
         <form onSubmit={this.handleUpload}>
@@ -68,18 +77,21 @@ class App extends Component {
             onChange={this.fileSelect}
             ref={(fileInput) => this.fileInput = fileInput}
           />
-          <button type="button" onClick={() => this.fileInput.click()}>Select</button>
+          <button type="button" onClick={() => this.fileInput.click()}>Upload</button>
           <input
             type="text"
+            placeholder="Hide your message"
+            value={text}
             onChange={this.handleChange}
           />
           <button type="submit">Encode</button>
+
         </form>
-        <div>
-          {confirmation !== null
-          && (
+        <br />
+        <div className="confirmation">
+          {confirmation !== null && (
           <div>
-            {`Encoded "****${confirmation[1].substring(confirmation[1].length - 4)}" into ${confirmation[0]}!`}
+            {confirmation}
           </div>
           )}
         </div>

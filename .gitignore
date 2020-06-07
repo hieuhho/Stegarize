@@ -2,3 +2,6 @@ bundle.js
 node_modules
 .vscode
 uploads/*
+!uploads/.gitkeep
+encoded/*
+!encoded/.gitkeep

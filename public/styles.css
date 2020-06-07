@@ -1,0 +1,60 @@
+h1, h2 {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  color: darkgreen;
+}
+
+body {
+  display: flex;
+  align-self: center;
+  margin: 0;
+  justify-content: center;
+  background-color: black;
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+  color: darkgreen;
+}
+
+#app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 55%;
+  height: 100vh;
+  background-color: black;
+  padding: 25px;
+}
+
+form {
+  display: flex;
+  align-self: center;
+  justify-content: center;
+}
+
+button {
+  background-color: darkgreen;
+  border: none;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+}
+
+button:hover {
+  cursor: pointer;
+}
+
+.decodeButton {
+  background-color: rgb(255, 0, 0);
+  border: none;
+  color: white;
+  margin: 2px;
+  padding: 5px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  box-shadow: 0 0 3px gray;
+}

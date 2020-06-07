@@ -1,6 +1,8 @@
 const express = require('express');
 const path = require('path');
 const multer = require('multer');
+const fs = require('fs');
+const steggy = require('steggy-noencrypt');
 
 const app = express();
 const port = process.env.PORT || 4000;
@@ -20,18 +22,26 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 
 let text;
+let fileName;
 
 app.post('/uploadText', (req, res) => {
   text = req.body.text;
-  res.send(text);
-  res.end();
+  res.status(201).end();
 });
 
 app.post('/uploadImg', upload.single('newImage'), (req, res) => {
   console.log(req.file);
-  const name = req.file.originalname;
-  res.send(name);
-  res.end();
+  fileName = req.file.originalname;
+  const original = fs.readFileSync(req.file.path);
+  const message = text;
+  const concealed = steggy.conceal(original, message, 'utf-8');
+  fs.writeFileSync(`./encoded/${fileName}`, concealed);
+  res.download(`./encoded/${fileName}`, fileName);
 });
+
+app.get('/download', (req, res) => {
+  res.download(`./encoded/${fileName}`, fileName);
+});
+
 
 app.listen(port, () => console.log(`Listening on ${port}`));

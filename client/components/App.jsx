@@ -8,25 +8,19 @@ class App extends Component {
     this.state = {
       text: '',
       confirmation: null,
-      selectedImg: '',
+      selectedImg: null,
+      imgPreview: null,
     };
-    this.fileSelect = this.fileSelect.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleImage = this.handleImage.bind(this);
+    this.handleDecode = this.handleDecode.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  fileSelect(e) {
-    this.setState({
-      selectedImg: e.target.files[0],
-    });
-  }
-
   handleChange(e) {
-    this.setState({
-      text: e.target.value,
-    });
+    e.target.id === 'selectedImg' ? this.setState({ selectedImg: e.target.files[0], imgPreview: URL.createObjectURL(e.target.files[0]) })
+      : this.setState({ [e.target.id]: e.target.value });
   }
 
   handleImage() {
@@ -34,6 +28,15 @@ class App extends Component {
     const fd = new FormData();
     fd.append('newImage', selectedImg, selectedImg.name);
     return axios.post('/uploadImg', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) });
+  }
+
+  handleDecode() {
+    const { selectedImg } = this.state;
+    const fd = new FormData();
+    fd.append('decodeImage', selectedImg, selectedImg.name);
+    axios.post('/decode', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) })
+      .then((res) => { this.setState({ decoded: res.data }); })
+      .catch((err) => console.log(err));
   }
 
   handleText() {
@@ -56,10 +59,11 @@ class App extends Component {
             this.setState({
               text: '',
               selectedImg: null,
-              confirmation: null,
+              confirmation: 'mischief managed!',
+              imgPreview: null,
             });
-          }, 10000);
-          setTimeout(() => window.location.reload(false), 15000);
+          }, 4000);
+          setTimeout(() => window.location.reload(false), 5000);
         })
         .then(() => window.open('/download'))
         .catch((err) => console.log(`Something went wrong! ${err}`));
@@ -67,27 +71,11 @@ class App extends Component {
   }
 
   render() {
-    const { text, confirmation } = this.state;
+    const {
+      text, confirmation, imgPreview, selectedImg, decoded,
+    } = this.state;
     return (
       <div className="main-container">
-        <form onSubmit={this.handleUpload}>
-          <input
-            type="file"
-            style={{ display: 'none' }}
-            onChange={this.fileSelect}
-            ref={(fileInput) => this.fileInput = fileInput}
-          />
-          <button type="button" onClick={() => this.fileInput.click()}>Upload</button>
-          <input
-            type="text"
-            placeholder="Hide your message"
-            value={text}
-            onChange={this.handleChange}
-          />
-          <button type="submit">Encode</button>
-
-        </form>
-        <br />
         <div className="confirmation">
           {confirmation !== null && (
           <div>
@@ -95,6 +83,45 @@ class App extends Component {
           </div>
           )}
         </div>
+        <form
+          onSubmit={this.handleUpload}
+          encType="multipart/form-data"
+          autoComplete="off"
+        >
+          <input
+            type="file"
+            style={{ display: 'none' }}
+            id="selectedImg"
+            onChange={this.handleChange}
+            ref={(fileInput) => this.fileInput = fileInput}
+          />
+          <button type="button" onClick={() => this.fileInput.click()}>Upload</button>
+          <input
+            type="text"
+            placeholder="Hide your message"
+            id="text"
+            value={text}
+            onChange={this.handleChange}
+          />
+          <button className="encodeButton" type="submit">Encode</button>
+          {selectedImg !== null
+          && <button className="decodeButton" type="button" onClick={this.handleDecode}>Decode</button>}
+        </form>
+        <br />
+        {imgPreview !== null && (
+        <div>
+          <img alt="loading..." src={imgPreview} />
+        </div>
+        )}
+        <br />
+        {decoded
+        && (
+        <div>
+          Hidden Message:
+          {' '}
+          {decoded}
+        </div>
+        )}
       </div>
     );
   }

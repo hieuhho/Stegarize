@@ -25,8 +25,7 @@ let text;
 
 app.post('/uploadText', (req, res) => {
   text = req.body.text;
-  res.send(text);
-  res.end();
+  res.status(201).end();
 });
 
 app.post('/uploadImg', upload.single('newImage'), (req, res) => {
@@ -35,7 +34,7 @@ app.post('/uploadImg', upload.single('newImage'), (req, res) => {
   const original = fs.readFileSync(req.file.path);
   const message = text;
   const concealed = steggy.conceal(original, message, 'utf-8');
-  fs.writeFileSync(`./encoded/${req.file.originalname}.png`, concealed);
+  fs.writeFileSync(`./encoded/${req.file.originalname}`, concealed);
   res.write(name);
   res.end();
 });

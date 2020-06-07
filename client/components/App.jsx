@@ -43,7 +43,7 @@ class App extends Component {
 
   handleUpload(e) {
     e.preventDefault();
-    const { selectedImg, text, confirmation } = this.state;
+    const { selectedImg, text } = this.state;
     if (selectedImg !== null && text !== null) {
       axios.all([this.handleImage(), this.handleText()])
         .then(axios.spread((...response) => {
@@ -68,14 +68,17 @@ class App extends Component {
             onChange={this.fileSelect}
             ref={(fileInput) => this.fileInput = fileInput}
           />
-          <button type="button" onClick={() => this.fileInput.click()}>Select</button>
+          <button type="button" onClick={() => this.fileInput.click()}>Upload</button>
           <input
             type="text"
+            placeholder="Hide your message"
             onChange={this.handleChange}
           />
           <button type="submit">Encode</button>
+
         </form>
-        <div>
+        <br />
+        <div className="confirmation">
           {confirmation !== null
           && (
           <div>

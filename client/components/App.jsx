@@ -14,6 +14,7 @@ class App extends Component {
     this.handleUpload = this.handleUpload.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleImage = this.handleImage.bind(this);
+    this.handleDecode = this.handleDecode.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
@@ -27,6 +28,15 @@ class App extends Component {
     const fd = new FormData();
     fd.append('newImage', selectedImg, selectedImg.name);
     return axios.post('/uploadImg', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) });
+  }
+
+  handleDecode() {
+    const { selectedImg } = this.state;
+    const fd = new FormData();
+    fd.append('decodeImage', selectedImg, selectedImg.name);
+    axios.post('/decode', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) })
+      .then((res) => { this.setState({ decoded: res.data }); })
+      .catch((err) => console.log(err));
   }
 
   handleText() {
@@ -49,11 +59,11 @@ class App extends Component {
             this.setState({
               text: '',
               selectedImg: null,
-              confirmation: null,
+              confirmation: 'mischief managed!',
               imgPreview: null,
             });
-          }, 10000);
-          setTimeout(() => window.location.reload(false), 15000);
+          }, 4000);
+          setTimeout(() => window.location.reload(false), 5000);
         })
         .then(() => window.open('/download'))
         .catch((err) => console.log(`Something went wrong! ${err}`));
@@ -62,7 +72,7 @@ class App extends Component {
 
   render() {
     const {
-      text, confirmation, imgPreview, selectedImg,
+      text, confirmation, imgPreview, selectedImg, decoded,
     } = this.state;
     return (
       <div className="main-container">
@@ -73,7 +83,11 @@ class App extends Component {
           </div>
           )}
         </div>
-        <form onSubmit={this.handleUpload} encType="multipart/form-data">
+        <form
+          onSubmit={this.handleUpload}
+          encType="multipart/form-data"
+          autoComplete="off"
+        >
           <input
             type="file"
             style={{ display: 'none' }}
@@ -91,11 +105,21 @@ class App extends Component {
           />
           <button className="encodeButton" type="submit">Encode</button>
           {selectedImg !== null
-          && <button className="decodeButton" type="button">Decode</button>}
+          && <button className="decodeButton" type="button" onClick={this.handleDecode}>Decode</button>}
         </form>
+        <br />
         {imgPreview !== null && (
         <div>
           <img alt="loading..." src={imgPreview} />
+        </div>
+        )}
+        <br />
+        {decoded
+        && (
+        <div>
+          Hidden Message:
+          {' '}
+          {decoded}
         </div>
         )}
       </div>

@@ -33,10 +33,11 @@ app.post('/uploadImg', upload.single('newImage'), (req, res) => {
   console.log(req.file);
   fileName = req.file.originalname;
   const original = fs.readFileSync(req.file.path);
-  const message = text;
-  const concealed = steggy.conceal(original, message, 'utf-8');
+  const concealed = steggy.conceal(original, text, 'utf-8');
   fs.writeFileSync(`./encoded/${fileName}`, concealed);
-  res.download(`./encoded/${fileName}`, fileName);
+  const filePath = path.join(__dirname, '..', 'encoded', `${fileName}`);
+  console.log('filePath: ', filePath);
+  res.send(`/encoded/${fileName}`);
 });
 
 app.get('/download', (req, res) => {

@@ -8,25 +8,18 @@ class App extends Component {
     this.state = {
       text: '',
       confirmation: null,
-      selectedImg: '',
+      selectedImg: null,
+      imgPreview: null,
     };
-    this.fileSelect = this.fileSelect.bind(this);
     this.handleUpload = this.handleUpload.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleImage = this.handleImage.bind(this);
     this.handleChange = this.handleChange.bind(this);
   }
 
-  fileSelect(e) {
-    this.setState({
-      selectedImg: e.target.files[0],
-    });
-  }
-
   handleChange(e) {
-    this.setState({
-      text: e.target.value,
-    });
+    e.target.id === 'selectedImg' ? this.setState({ selectedImg: e.target.files[0], imgPreview: URL.createObjectURL(e.target.files[0]) })
+      : this.setState({ [e.target.id]: e.target.value });
   }
 
   handleImage() {
@@ -57,6 +50,7 @@ class App extends Component {
               text: '',
               selectedImg: null,
               confirmation: null,
+              imgPreview: null,
             });
           }, 10000);
           setTimeout(() => window.location.reload(false), 15000);
@@ -67,27 +61,11 @@ class App extends Component {
   }
 
   render() {
-    const { text, confirmation } = this.state;
+    const {
+      text, confirmation, imgPreview, selectedImg,
+    } = this.state;
     return (
       <div className="main-container">
-        <form onSubmit={this.handleUpload}>
-          <input
-            type="file"
-            style={{ display: 'none' }}
-            onChange={this.fileSelect}
-            ref={(fileInput) => this.fileInput = fileInput}
-          />
-          <button type="button" onClick={() => this.fileInput.click()}>Upload</button>
-          <input
-            type="text"
-            placeholder="Hide your message"
-            value={text}
-            onChange={this.handleChange}
-          />
-          <button type="submit">Encode</button>
-
-        </form>
-        <br />
         <div className="confirmation">
           {confirmation !== null && (
           <div>
@@ -95,6 +73,31 @@ class App extends Component {
           </div>
           )}
         </div>
+        <form onSubmit={this.handleUpload} encType="multipart/form-data">
+          <input
+            type="file"
+            style={{ display: 'none' }}
+            id="selectedImg"
+            onChange={this.handleChange}
+            ref={(fileInput) => this.fileInput = fileInput}
+          />
+          <button type="button" onClick={() => this.fileInput.click()}>Upload</button>
+          <input
+            type="text"
+            placeholder="Hide your message"
+            id="text"
+            value={text}
+            onChange={this.handleChange}
+          />
+          <button className="encodeButton" type="submit">Encode</button>
+          {selectedImg !== null
+          && <button className="decodeButton" type="button">Decode</button>}
+        </form>
+        {imgPreview !== null && (
+        <div>
+          <img alt="loading..." src={imgPreview} />
+        </div>
+        )}
       </div>
     );
   }

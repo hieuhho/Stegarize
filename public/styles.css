@@ -3,6 +3,8 @@ h1, h2 {
   align-self: center;
   justify-content: center;
   color: darkgreen;
+  font-family: 'Jura', sans-serif;
+  text-shadow: 0px 0px 15px green;
 }
 
 body {
@@ -51,3 +53,12 @@ button:hover {
   cursor: pointer;
 }
 
+.instructions {
+  text-align: left;
+  font-size: 15px;
+}
+
+img {
+  max-width: 300px;
+  max-height: 300px;
+}

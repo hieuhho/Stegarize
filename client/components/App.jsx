@@ -67,7 +67,7 @@ class App extends Component {
       this.setState({
         text: '',
         selectedImg: null,
-        confirmation: 'clearing data ...',
+        confirmation: 'deleting files ...',
         imgPreview: null,
       });
     }, 6000);

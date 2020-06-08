@@ -44,7 +44,6 @@ const deleteFiles = (uploadName, encodedName) => {
       if (err) console.log(`Deletion Error: ${err}`);
     });
   }
-  console.log('files obliterated');
 };
 
 app.post('/uploadText', (req, res) => {

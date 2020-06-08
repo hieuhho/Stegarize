@@ -32,7 +32,7 @@ class App extends Component {
   handleImage() {
     const { selectedImg } = this.state;
     const fd = new FormData();
-    fd.append('newImage', selectedImg, selectedImg.name);
+    fd.append('secretImage', selectedImg, selectedImg.name);
     return axios.post('/uploadImg', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) });
   }
 
@@ -45,7 +45,7 @@ class App extends Component {
           this.setState({ confirmation: 'keep it secret, keep it safe' });
         }))
         .then(() => window.open('/download'))
-        .catch((err) => console.log(`Something went wrong! ${err}`))
+        .catch((err) => { this.setState({ errorMessage: `${err.response.status} ${err.response.data}`, confirmation: 'you shall not pass' }); })
         .finally(() => this.clearAndReload());
     }
   }
@@ -53,11 +53,11 @@ class App extends Component {
   handleDecode() {
     const { selectedImg } = this.state;
     const fd = new FormData();
-    fd.append('decodeImage', selectedImg, selectedImg.name);
+    fd.append('secretImage', selectedImg, selectedImg.name);
     axios.post('/decode', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) })
       .then((res) => { this.setState({ decoded: `Hidden message: ${res.data}`, imgPreview: null }); })
-      .catch((err) => { this.setState({ noMessage: 'There is no message.' }); })
-      .finally(() => this.clearAndReload());
+      .catch((err) => { this.setState({ errorMessage: `${err.response.status} ${err.response.data}`, confirmation: 'Always remember, Frodo, the message is trying to get back to its master. It wants to be found.' }); });
+    // .finally(() => this.clearAndReload());
   }
 
   clearAndReload() {
@@ -74,7 +74,7 @@ class App extends Component {
 
   render() {
     const {
-      text, confirmation, imgPreview, selectedImg, decoded, noMessage,
+      text, confirmation, imgPreview, selectedImg, decoded, errorMessage,
     } = this.state;
     return (
       <div className="main-container">
@@ -114,7 +114,7 @@ class App extends Component {
         <div><img alt="loading..." src={imgPreview} /></div>
         )}
         <br />
-        {(decoded && (<div>{decoded}</div>)) || (noMessage && (<div>{noMessage}</div>))}
+        {(decoded && (<div>{decoded}</div>)) || (errorMessage && (<div>{errorMessage}</div>))}
         <br />
         <div className="instructions">
           <p>

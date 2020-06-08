@@ -36,12 +36,12 @@ let originalName;
 const deleteFiles = (uploadName, encodedName) => {
   if (uploadName) {
     fs.unlinkSync(`./uploads/${uploadName}`, (err) => {
-      if (err) console.log(`Deletion Error: ${err}`);
+      if (err) throw err;
     });
   }
   if (encodedName) {
     fs.unlinkSync(`./encoded/${encodedName}`, (err) => {
-      if (err) console.log(`Deletion Error: ${err}`);
+      if (err) throw err;
     });
   }
 };

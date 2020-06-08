@@ -10,6 +10,7 @@ class App extends Component {
       confirmation: 'Stegarize',
       selectedImg: null,
       imgPreview: null,
+      uploadProgress: 0,
     };
     this.handleChange = this.handleChange.bind(this);
     this.handleText = this.handleText.bind(this);
@@ -33,7 +34,15 @@ class App extends Component {
     const { selectedImg } = this.state;
     const fd = new FormData();
     fd.append('secretImage', selectedImg, selectedImg.name);
-    return axios.post('/uploadImg', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) });
+    this.setState({ selectedImg: null });
+    return axios.post('/uploadImg', fd, {
+      onUploadProgress: (progressEvent) => {
+        const percent = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+        this.setState({
+          uploadProgress: percent,
+        });
+      },
+    });
   }
 
   handleEncode(e) {
@@ -42,7 +51,7 @@ class App extends Component {
     if (selectedImg !== null && text !== '') {
       axios.all([this.handleImage(), this.handleText()])
         .then(axios.spread((...response) => {
-          this.setState({ confirmation: 'keep it secret, keep it safe' });
+          this.setState({ confirmation: 'keep it secret, keep it safe', uploadProgress: 'uploaded' });
         }))
         .then(() => window.location.href = '/download')
         .catch((err) => { this.setState({ errorMessage: `${err.response.status} ${err.response.data}`, confirmation: 'you shall not pass' }); })
@@ -54,7 +63,15 @@ class App extends Component {
     const { selectedImg } = this.state;
     const fd = new FormData();
     fd.append('secretImage', selectedImg, selectedImg.name);
-    axios.post('/decode', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) })
+    this.setState({ selectedImg: null });
+    axios.post('/decode', fd, {
+      onUploadProgress: (progressEvent) => {
+        const percent = Math.round((progressEvent.loaded / progressEvent.total) * 100);
+        this.setState({
+          uploadProgress: percent,
+        });
+      },
+    })
       .then((res) => {
         this.setState({ decoded: `Hidden message: ${res.data}`, imgPreview: null });
       })
@@ -76,7 +93,7 @@ class App extends Component {
 
   render() {
     const {
-      text, confirmation, imgPreview, selectedImg, decoded, errorMessage,
+      text, confirmation, imgPreview, selectedImg, decoded, errorMessage, uploadProgress,
     } = this.state;
     return (
       <div className="main-container">
@@ -117,6 +134,14 @@ class App extends Component {
         )}
         <br />
         {(decoded && (<h2>{decoded}</h2>)) || (errorMessage && (<h2>{errorMessage}</h2>))}
+        {uploadProgress > 0 && (
+        <div className="progressBar">
+          <div className="progressDone" style={{ opacity: 1, width: `${uploadProgress}%` }}>
+            {uploadProgress}
+            %
+          </div>
+        </div>
+        )}
         <br />
         <div className="instructions">
           <p>

@@ -39,7 +39,6 @@ app.post('/uploadText', (req, res) => {
 
 app.post('/uploadImg', (req, res) => {
   upload(req, res, (err) => {
-    console.log('req: ', req);
     if (err) {
       res.status(400).send('use .png only');
     } else {

@@ -57,3 +57,8 @@ button:hover {
   text-align: left;
   font-size: 15px;
 }
+
+img {
+  max-width: 300px;
+  max-height: 300px;
+}

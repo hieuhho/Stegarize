@@ -56,17 +56,11 @@ app.get('/download', (req, res) => {
   res.download(`./encoded/${fileName}`, fileName);
 });
 
-app.post('/decode', (req, res) => {
-  upload(req, res, (err) => {
-    if (err) {
-      res.status(400).send('use .png only');
-    } else {
-      const encoded = req.file.path;
-      const secretImage = fs.readFileSync(encoded);
-      const revealed = steggy.reveal(secretImage, 'utf-8');
-      res.send(revealed);
-    }
-  });
+app.post('/decode', upload, (req, res) => {
+  const encoded = req.file.path;
+  const secretImage = fs.readFileSync(encoded);
+  const revealed = steggy.reveal(secretImage, 'utf-8');
+  res.send(revealed);
 });
 
 app.listen(port, () => console.log(`Listening on ${port}`));

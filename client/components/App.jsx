@@ -44,7 +44,7 @@ class App extends Component {
         .then(axios.spread((...response) => {
           this.setState({ confirmation: 'keep it secret, keep it safe' });
         }))
-        .then(() => window.open('/download'))
+        .then(() => window.location.href = '/download')
         .catch((err) => { this.setState({ errorMessage: `${err.response.status} ${err.response.data}`, confirmation: 'you shall not pass' }); })
         .finally(() => this.clearAndReload());
     }
@@ -56,7 +56,6 @@ class App extends Component {
     fd.append('secretImage', selectedImg, selectedImg.name);
     axios.post('/decode', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) })
       .then((res) => {
-        console.log('res: ', res);
         this.setState({ decoded: `Hidden message: ${res.data}`, imgPreview: null, confirmation: 'The message has awoken, it’s heard its masters call.' });
       })
       .catch((err) => { err.response ? this.setState({ errorMessage: `${err.response.status} ${err.response.data.substring(err.response.data.indexOf('Error:'), err.response.data.indexOf('<br>'))}`, confirmation: 'Always remember, Frodo, the message is trying to get back to its master. It wants to be found.' }) : this.setState({ errorMessage: 'This is not the message you\'re looking for' }); })
@@ -117,7 +116,7 @@ class App extends Component {
         <div><img alt="loading..." src={imgPreview} /></div>
         )}
         <br />
-        {(decoded && (<h2>{decoded}</h2>)) || (errorMessage && (<div>{errorMessage}</div>))}
+        {(decoded && (<h2 style={{ color: 'red' }}>{decoded}</h2>)) || (errorMessage && (<div>{errorMessage}</div>))}
         <br />
         <div className="instructions">
           <p>

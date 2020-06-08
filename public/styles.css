@@ -4,6 +4,8 @@ h1, h2 {
   justify-content: center;
   color: darkgreen;
   font-family: 'Jura', sans-serif;
+}
+h1 {
   text-shadow: 0px 0px 15px green;
 }
 
@@ -43,6 +45,20 @@ button {
   text-decoration: none;
   display: block;
   font-size: 14px;
+  box-shadow: 0 0 10px darkgreen;
+}
+
+input[type=text] {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid darkgreen;
+  border-top: 1px solid darkgreen;
+  color: white;
+  box-shadow: 0 0 10px darkgreen;
+
+}
+input:focus{
+  outline: none;
 }
 
 .decodeButton {

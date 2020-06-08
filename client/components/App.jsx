@@ -7,7 +7,7 @@ class App extends Component {
 
     this.state = {
       text: '',
-      confirmation: null,
+      confirmation: 'Stegarize',
       selectedImg: null,
       imgPreview: null,
     };
@@ -16,6 +16,7 @@ class App extends Component {
     this.handleImage = this.handleImage.bind(this);
     this.handleEncode = this.handleEncode.bind(this);
     this.handleDecode = this.handleDecode.bind(this);
+    this.clearAndReload = this.clearAndReload.bind(this);
   }
 
   handleChange(e) {
@@ -41,21 +42,11 @@ class App extends Component {
     if (selectedImg !== null && text !== '') {
       axios.all([this.handleImage(), this.handleText()])
         .then(axios.spread((...response) => {
-          this.setState({
-            confirmation: 'keep it secret, keep it safe',
-          });
-          setTimeout(() => {
-            this.setState({
-              text: '',
-              selectedImg: null,
-              confirmation: 'mischief managed!',
-              imgPreview: null,
-            });
-          }, 4000);
-          setTimeout(() => window.location.reload(false), 5000);
+          this.setState({ confirmation: 'keep it secret, keep it safe' });
         }))
         .then(() => window.open('/download'))
-        .catch((err) => console.log(`Something went wrong! ${err}`));
+        .catch((err) => console.log(`Something went wrong! ${err}`))
+        .finally(() => this.clearAndReload());
     }
   }
 
@@ -64,23 +55,32 @@ class App extends Component {
     const fd = new FormData();
     fd.append('decodeImage', selectedImg, selectedImg.name);
     axios.post('/decode', fd, { onUploadProgress: (progressEvent) => console.log(`Upload Process: ${Math.round((progressEvent.loaded / progressEvent.total) * 100)} %`) })
-      .then((res) => { this.setState({ decoded: res.data, imgPreview: null }); })
-      .catch((err) => console.log(`Something went wrong! ${err}`));
+      .then((res) => { this.setState({ decoded: `Hidden message: ${res.data}`, imgPreview: null }); })
+      .catch((err) => { this.setState({ noMessage: 'There is no message.' }); })
+      .finally(() => this.clearAndReload());
+  }
+
+  clearAndReload() {
+    setTimeout(() => {
+      this.setState({
+        text: '',
+        selectedImg: null,
+        confirmation: 'mischief managed!',
+        imgPreview: null,
+      });
+    }, 4000);
+    setTimeout(() => window.location.reload(false), 5000);
   }
 
   render() {
     const {
-      text, confirmation, imgPreview, selectedImg, decoded,
+      text, confirmation, imgPreview, selectedImg, decoded, noMessage,
     } = this.state;
     return (
       <div className="main-container">
         <h1>
-          Stegarize
+          {confirmation}
         </h1>
-        <div className="confirmation">
-          {confirmation !== null && (
-          <div>{confirmation}</div>)}
-        </div>
         <br />
         <form
           className="userArea"
@@ -103,6 +103,7 @@ class App extends Component {
             id="text"
             value={text}
             onChange={this.handleChange}
+            required
           />
           <button className="encodeButton" type="submit">Encode</button>
           {selectedImg !== null
@@ -110,19 +111,19 @@ class App extends Component {
         </form>
         <br />
         {imgPreview !== null && (
-        <div>
-          <img alt="loading..." src={imgPreview} />
-        </div>
+        <div><img alt="loading..." src={imgPreview} /></div>
         )}
         <br />
-        {decoded
-        && (
-        <div>
-          Hidden Message:
-          {' '}
-          {decoded}
+        {(decoded && (<div>{decoded}</div>)) || (noMessage && (<div>{noMessage}</div>))}
+        <br />
+        <div className="instructions">
+          <p>
+            To encode: upload an image, enter your message and click Encode.
+          </p>
+          <p>
+            To decode: upload an image and click Decode.
+          </p>
         </div>
-        )}
       </div>
     );
   }

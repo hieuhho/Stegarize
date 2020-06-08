@@ -30,7 +30,21 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use(express.json());
 
 let text;
-let fileName;
+let newName;
+let originalName;
+
+const deleteFiles = (uploadName, encodedName) => {
+  if (uploadName) {
+    fs.unlinkSync(`./uploads/${uploadName}`, (err) => {
+      if (err) throw err;
+    });
+  }
+  if (encodedName) {
+    fs.unlinkSync(`./encoded/${encodedName}`, (err) => {
+      if (err) throw err;
+    });
+  }
+};
 
 app.post('/uploadText', (req, res) => {
   text = req.body.text;
@@ -40,24 +54,28 @@ app.post('/uploadText', (req, res) => {
 app.post('/uploadImg', (req, res) => {
   upload(req, res, (err) => {
     if (err) {
-      res.status(400).send('use .png only');
+      res.status(406).send('use .png only');
     } else {
-      fileName = req.file.originalname;
+      newName = req.file.filename;
+      originalName = req.file.originalname;
       const original = fs.readFileSync(req.file.path);
       const concealed = steggy.conceal(original, text, 'utf-8');
-      fs.writeFileSync(`./encoded/${fileName}`, concealed);
+      fs.writeFileSync(`./encoded/${originalName}`, concealed);
       res.status(201).end();
     }
   });
 });
 
 app.get('/download', (req, res) => {
-  res.download(`./encoded/${fileName}`, fileName);
+  res.download(`./encoded/${originalName}`, originalName);
+  setTimeout(() => { deleteFiles(newName, originalName); }, 5000);
 });
 
 app.post('/decode', upload, (req, res) => {
+  newName = req.file.filename;
   const encoded = req.file.path;
   const secretImage = fs.readFileSync(encoded);
+  setTimeout(() => { deleteFiles(newName); }, 5000);
   const revealed = steggy.reveal(secretImage, 'utf-8');
   res.send(revealed);
 });

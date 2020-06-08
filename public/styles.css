@@ -4,7 +4,12 @@ h1, h2 {
   justify-content: center;
   color: darkgreen;
   font-family: 'Jura', sans-serif;
+}
+h1 {
   text-shadow: 0px 0px 15px green;
+}
+h2 {
+  color: red;
 }
 
 body {
@@ -13,7 +18,7 @@ body {
   margin: 0;
   justify-content: center;
   background-color: black;
-  font-family: "Courier New", Courier, monospace;
+  font-family: 'Jura', sans-serif;
   text-align: center;
   color: darkgreen;
 }
@@ -23,19 +28,25 @@ body {
   align-items: center;
   justify-content: center;
   width: 55%;
-  height: 100vh;
+  height: 60vh;
   background-color: black;
   padding: 25px;
+  margin: 15vh 0;
+  animation: shadows 4s ease-out infinite;
+  animation-delay: 2s;
 }
 
 form {
   display: flex;
   align-self: center;
   justify-content: center;
+  font-family: 'Jura', sans-serif;
+  transition: width .35s ease-in-out;
 }
 
 button {
   background-color: darkgreen;
+  box-shadow: 0 0 10px darkgreen;
   border: none;
   color: black;
   padding: 15px 32px;
@@ -43,6 +54,24 @@ button {
   text-decoration: none;
   display: block;
   font-size: 14px;
+  font-family: 'Jura', sans-serif;
+}
+
+input[type=text] {
+  background-color: transparent;
+  color: white;
+  border: none;
+  border-bottom: 1px solid darkgreen;
+  border-top: 1px solid darkgreen;
+  box-shadow: 0 0 10px darkgreen;
+  font-family: 'Jura', sans-serif;
+  width: 200px;
+  transition: width .35s ease-in-out;
+}
+
+input[type=text]:focus{
+  outline: none;
+  width: 350px
 }
 
 .decodeButton {
@@ -53,12 +82,19 @@ button:hover {
   cursor: pointer;
 }
 
-.instructions {
-  text-align: left;
-  font-size: 15px;
-}
-
 img {
   max-width: 300px;
   max-height: 300px;
+}
+
+canvas {
+  display: block;
+  position: absolute;
+  z-index: -1;
+}
+
+@keyframes shadows {
+  0%   { box-shadow: 0 0 0 black; }
+  50%  { box-shadow: 0 0 25px darkgreen; }
+  100% { box-shadow: 0 0 0 black; }
 }

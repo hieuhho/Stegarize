@@ -79,8 +79,8 @@ class App extends Component {
       .then((res) => {
         this.setState({ decoded: `Hidden message: ${res.data}`, imgPreview: null, uploadProgress: 0 });
       })
-      .catch((err) => { console.log('error decode: ', err.response); err.response ? this.setState({ errorMessage: `${err.response.status} ${err.response.data.substring(err.response.data.indexOf('Error:'), err.response.data.indexOf('<br>'))}`, confirmation: 'Always remember, Frodo, the message is trying to get back to its master. It wants to be found.', uploadProgress: 0 }) : this.setState({ errorMessage: 'This is not the message you\'re looking for', uploadProgress: 0 }); });
-    // .finally(() => this.clearAndReload());
+      .catch((err) => { err.response ? this.setState({ errorMessage: `${err.response.status} ${err.response.data.substring(err.response.data.indexOf('Error:'), err.response.data.indexOf('<br>'))}. There is no message`, confirmation: 'Always remember, Frodo, the message is trying to get back to its master. It wants to be found.', uploadProgress: 0 }) : this.setState({ errorMessage: 'This is not the message you\'re looking for', uploadProgress: 0 }); })
+      .finally(() => this.clearAndReload());
   }
 
   clearAndReload() {

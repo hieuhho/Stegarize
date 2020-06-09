@@ -51,7 +51,7 @@ class App extends Component {
     if (selectedImg !== null && text !== '') {
       axios.all([this.handleImage(), this.handleText()])
         .then(axios.spread((...response) => {
-          this.setState({ confirmation: 'keep it secret, keep it safe', uploadProgress: 'uploaded' });
+          this.setState({ confirmation: 'keep it secret, keep it safe', uploadProgress: 0 });
         }))
         .then(() => window.location.href = '/download')
         .catch((err) => { this.setState({ errorMessage: `${err.response.status} ${err.response.data}`, confirmation: 'you shall not pass' }); })
@@ -73,9 +73,9 @@ class App extends Component {
       },
     })
       .then((res) => {
-        this.setState({ decoded: `Hidden message: ${res.data}`, imgPreview: null });
+        this.setState({ decoded: `Hidden message: ${res.data}`, imgPreview: null, uploadProgress: 0 });
       })
-      .catch((err) => { err.response ? this.setState({ errorMessage: `${err.response.status} ${err.response.data.substring(err.response.data.indexOf('Error:'), err.response.data.indexOf('<br>'))}`, confirmation: 'Always remember, Frodo, the message is trying to get back to its master. It wants to be found.' }) : this.setState({ errorMessage: 'This is not the message you\'re looking for' }); })
+      .catch((err) => { err.response ? this.setState({ errorMessage: `${err.response.status} ${err.response.data.substring(err.response.data.indexOf('Error:'), err.response.data.indexOf('<br>'))}`, confirmation: 'Always remember, Frodo, the message is trying to get back to its master. It wants to be found.', uploadProgress: 0 }) : this.setState({ errorMessage: 'This is not the message you\'re looking for', uploadProgress: 0 }); })
       .finally(() => this.clearAndReload());
   }
 

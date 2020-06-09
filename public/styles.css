@@ -108,7 +108,7 @@ canvas {
 }
 
 .progressDone {
-  background: linear-gradient(to left, darkgreen, darkgreen 50%);
+  background: darkgreen;
   color: white;
   display: flex;
   align-items: center;
@@ -116,5 +116,5 @@ canvas {
   height: 100%;
   width: 0;
   opacity: 0;
-  transition: 1s ease 1s;
+  transition: 1s ease-out;
 }

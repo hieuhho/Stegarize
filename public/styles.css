@@ -48,7 +48,7 @@ button {
   background-color: darkgreen;
   box-shadow: 0 0 10px darkgreen;
   border: none;
-  color: black;
+  color: white;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
@@ -71,7 +71,7 @@ input[type=text] {
 
 input[type=text]:focus{
   outline: none;
-  width: 350px
+  width: 370px
 }
 
 .decodeButton {

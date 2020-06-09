@@ -21,7 +21,7 @@ class App extends Component {
   }
 
   handleChange(e) {
-    e.target.id === 'selectedImg' ? this.setState({ selectedImg: e.target.files[0], imgPreview: URL.createObjectURL(e.target.files[0]) })
+    e.target.id === 'selectedImg' ? this.setState({ selectedImg: e.target.files[0], imgPreview: URL.createObjectURL(e.target.files[0]), errorMessage: null })
       : this.setState({ [e.target.id]: e.target.value });
   }
 
@@ -51,11 +51,15 @@ class App extends Component {
     if (selectedImg !== null && text !== '') {
       axios.all([this.handleImage(), this.handleText()])
         .then(axios.spread((...response) => {
-          this.setState({ confirmation: 'keep it secret, keep it safe', uploadProgress: 0 });
+          this.setState({ confirmation: 'Keep it secret, keep it safe', uploadProgress: 0 });
         }))
         .then(() => window.location.href = '/download')
-        .catch((err) => { this.setState({ errorMessage: `${err.response.status} ${err.response.data}`, confirmation: 'you shall not pass' }); })
+        .catch((err) => { this.setState({ errorMessage: `${err.response.status} ${err.response.data}`, confirmation: 'You shall not pass!' }); })
         .finally(() => this.clearAndReload());
+    } else if (selectedImg === null && text !== '') {
+      this.setState({
+        errorMessage: 'Upload an image first!',
+      });
     }
   }
 
@@ -112,6 +116,7 @@ class App extends Component {
             style={{ display: 'none' }}
             id="selectedImg"
             onChange={this.handleChange}
+            accept="image/png"
             ref={(fileInput) => this.fileInput = fileInput}
           />
           <button className="uploadButton" type="button" onClick={() => this.fileInput.click()}>Upload</button>

@@ -98,3 +98,23 @@ canvas {
   50%  { box-shadow: 0 0 25px darkgreen; }
   100% { box-shadow: 0 0 0 black; }
 }
+
+.progressBar {
+  background-color: black;
+  border: 1px solid darkgreen;
+  position: relative;
+  margin: 15px 0;
+  height: 30px;
+}
+
+.progressDone {
+  background: darkgreen;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 0;
+  opacity: 0;
+  transition: 1s ease-out;
+}

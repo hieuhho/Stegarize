@@ -36,11 +36,14 @@ Once the project moves into development, the press release can be used as a touc
 
 ## How to Get Started ##
   > To encode an image with information, upload an image, type in the information and click "Encode".
+  
   > To decode an image, upload an image and click "Decode".
 
 ## Customer Quote ##
   > "The site looks 🔥 btw. Love the background and color scheme" - SS
+  
   > "it looks amazing" - CW
+  
   > "ever since i found out about it I have not used any other app for my steganography needs" - AT
 
 ## Closing and Call to Action ##

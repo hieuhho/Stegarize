@@ -20,7 +20,7 @@ function matrixRain() {
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   for (let i = 0; i < rain.length; i += 1) {
     const text = alphabet[Math.floor(Math.random() * alphabet.length)];
-    ctx.fillStyle = 'rgb(0, 66, 0)';
+    ctx.fillStyle = 'darkgreen';
     ctx.fillText(text, i * fontSize, rain[i] * fontSize);
     rain[i] += 1;
     if (rain[i] * fontSize > canvas.height && Math.random() > 0.95) {

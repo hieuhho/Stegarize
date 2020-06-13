@@ -14,21 +14,15 @@
 ## Solution ##
   > Unlike cryptography, which conceals the contents of a secret message, steganography conceals the very fact that there is a message or any communication at all. This web app solves the problem of 
 
-## Quote from You ##
-  > "I was inspired by the Matrix" 
-
 ## How to Get Started ##
   > To encode an image with information, upload an image, type in the information and click "Encode".
   
   > To decode an image, upload an image and click "Decode".
 
-## Customer Quote ##
+## Customer Quotes ##
   > "The site looks 🔥 btw. Love the background and color scheme" - SS
   
   > "it looks amazing" - CW
   
   > "ever since i found out about it I have not used any other app for my steganography needs" - AT
-
-## Closing and Call to Action ##
-  > Stop having your information out on the net and Stegarize them today!
 

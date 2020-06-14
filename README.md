@@ -6,8 +6,7 @@
   > This web app aims at secure-conscious users who want to conceal their messages and communcations.
 
 ## Preview
-
-A deployed version of the project can be found [here](https://stegarize.herokuapp.com/).
+> A deployed version of the project can be found [here](https://stegarize.herokuapp.com/).
 
 ## Summary ##
   > Steganography is the technique of hiding secret data within an ordinary, non-secret, file or message in order to avoid detection. The use of steganography can be combined with encryption as an extra step for hiding or protecting data. This app allows user to upload an image, encode the image with text and reveal the hidden text on subsequent re-upload.

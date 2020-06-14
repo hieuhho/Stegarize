@@ -64,6 +64,10 @@ npm run build-dev
 * [Express](https://expressjs.com/)
 * [React](https://reactjs.org/)
 
+## Deployment
+
+This app was deployed using [Heroku](https://dashboard.heroku.com/)
+
 ## Authors
 
 * **Hieu Ho** - *Initial work* - [AmiraVomir](https://github.com/AmiraVomir)

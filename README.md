@@ -1,6 +1,6 @@
 # Stegarize #
 
-![Cicada3301](https://upload.wikimedia.org/wikipedia/en/7/7e/Cicada_3301_logo.jpg)
+![Cicada3301](https://usercontent1.hubstatic.com/14122792_f1024.jpg)
 
 ## Description ##
   > This web app aims at secure-conscious users who want to conceal their messages and communcations.

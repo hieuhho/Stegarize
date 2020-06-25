@@ -1,6 +1,6 @@
 # Stegarize #
 
-![Cicada3301](https://usercontent1.hubstatic.com/14122792_f1024.jpg)
+![OG-Image](https://i.imgur.com/vdbKvWi.png)
 
 ## Description ##
   > This web app aims at secure-conscious users who want to conceal their messages and communcations.
@@ -19,15 +19,17 @@
 
 ## Using the Product ##
   > To encode an image with information, upload an image, type in the information and click "Encode".
-  
-  > To decode an image, upload an image and click "Decode".
 
+  ![Encoding](https://i.imgur.com/GhNKCMu.gifv)
+
+  > To decode an image, upload an image and click "Decode".
+  ![Decoding](https://i.imgur.com/u7CqLG4.gifv)
 
 ## Customer Quotes ##
   > "The site looks 🔥 btw. Love the background and color scheme" - SS
-  
+
   > "it looks amazing" - CW
-  
+
   > "ever since i found out about it I have not used any other app for my steganography needs" - AT
 
 ## Getting Started

@@ -20,10 +20,11 @@
 ## Using the Product ##
   > To encode an image with information, upload an image, type in the information and click "Encode".
 
-  ![Encoding](https://i.imgur.com/GhNKCMu.gifv)
+  ![Encoding](https://i.imgur.com/TMObyqB.gif)
 
   > To decode an image, upload an image and click "Decode".
-  ![Decoding](https://i.imgur.com/u7CqLG4.gifv)
+  
+  ![Decoding](https://i.imgur.com/yUmi6J3.gif)
 
 ## Customer Quotes ##
   > "The site looks 🔥 btw. Love the background and color scheme" - SS
